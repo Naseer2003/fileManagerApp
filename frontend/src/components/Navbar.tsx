@@ -1,50 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
+import { useTheme } from "../context/ThemeContext";
 
 const Navbar: React.FC = () => {
-  const [darkMode, setDarkMode] = useState(false);
-
-  // Load saved theme from localStorage
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setDarkMode(true);
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
-
-  // Toggle theme
-  const toggleTheme = () => {
-    setDarkMode((prev) => {
-      const newMode = !prev;
-      if (newMode) {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-      }
-      return newMode;
-    });
-  };
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <nav className="bg-[#2b2b2b] dark:bg-gray-900 w-full flex items-center justify-between px-6 py-2 shadow-md transition-colors duration-300">
-      {/* Logo & Tagline */}
+    <nav className="bg-[#2b2b2b] dark:bg-gray-900 text-white dark:text-gray-100 w-full flex items-center justify-between px-6 py-2 shadow-md transition-colors duration-300">
+      {/* Logo */}
       <div className="flex flex-col leading-tight">
-        <span className="text-white font-bold text-lg tracking-wide">
+        <span className="font-bold text-lg tracking-wide">
           DEZIGN <span className="text-red-500">SHARK</span>
           <sup className="text-xs">®</sup>
         </span>
-        <span className="text-xs text-gray-400">ALL ABOUT DESIGN</span>
+        <span className="text-xs text-gray-400 dark:text-gray-300">ALL ABOUT DESIGN</span>
       </div>
 
-      {/* Toggle Button */}
+      {/* Toggle */}
       <button
         onClick={toggleTheme}
-        className="bg-blue-600 hover:bg-blue-700 p-2 rounded-full text-white transition"
+        className="bg-blue-600 hover:bg-blue-700 p-2 rounded-full text-white transition-all duration-300 hover:scale-110"
+        aria-label="Toggle theme"
       >
-        {darkMode ? <FaSun size={16} /> : <FaMoon size={16} />}
+        {theme === "light" ? <FaMoon size={16} /> : <FaSun size={16} />}
       </button>
     </nav>
   );
