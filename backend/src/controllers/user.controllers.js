@@ -49,6 +49,14 @@ const login = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+const logout = async (req, res) => {
+  try {
+    res.status(200).json({ message: 'Log out successful' });
+  } catch (error) {
+    console.log('Logout Error:', error.message);
+    res.status(500).json({ message: 'Internal server' });
+  }
+};
 const allUsers = async (req, res) => {
   try {
     const users = await UserModel.find();
@@ -68,4 +76,4 @@ const protectedRoute = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
-module.exports = { login, signup, allUsers, protectedRoute };
+module.exports = { login, signup, allUsers, protectedRoute, logout };
