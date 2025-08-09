@@ -6,4 +6,4 @@ export const api = axios.create({
 });
 
 export const fetchFolders = () =>
-  api.get("/files/folders").then((res) => res.data); // [{ _id: 'Brochures', totalItems: 7 }, ...]
+  api.get("/folder/get_folders").then((res) => res.data); // [{ _id: 'Brochures', totalItems: 7 }, ...]

@@ -1,7 +1,8 @@
 const multer = require('multer');
-const cloudinary = require('../config/cloudinary'); // already configured
+const cloudinary = require('../config/cloudinary');
 const FileModel = require('../models/file.model');
 const FolderModel = require('../models/folder.model');
+
 // Multer setup
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -26,6 +27,7 @@ const uploadFile = async (req, res) => {
         const file = new FileModel({
           name: uploadedFile.original_filename,
           url: uploadedFile.secure_url,
+          public_id: uploadedFile.public_id,
           folder: folder._id,
           size: uploadedFile.bytes,
           type: uploadedFile.format,
@@ -42,6 +44,7 @@ const uploadFile = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
 const filesByFolder = async (req, res) => {
   try {
     const files = await FileModel.find({
@@ -53,5 +56,21 @@ const filesByFolder = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+const deleteFile = async (req, res) => {
+  try {
+    const file = await FileModel.findById(req.params.id);
+    if (!file) return res.status(404).json({ error: 'File not found' });
 
-module.exports = { uploadFile, filesByFolder, upload };
+    // ✅ Will now work because public_id is stored
+    await cloudinary.uploader.destroy(file.public_id);
+
+    await FileModel.findByIdAndDelete(req.params.id);
+
+    res.json({ message: 'File deleted successfully' });
+  } catch (err) {
+    console.error('Delete file error:', err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+module.exports = { uploadFile, filesByFolder, upload, deleteFile };
