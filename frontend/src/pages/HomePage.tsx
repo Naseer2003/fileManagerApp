@@ -1,30 +1,49 @@
-import React from "react";
-import Navbar from "../components/Navbar"; // adjust path as needed
+// src/pages/HomePage.tsx
+import React, { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
+import Sidebar from "../components/Sidebar";
+import FolderGrid from "../components/FolderGrid";
+import { fetchFolders } from "../config/api";
 
 const HomePage: React.FC = () => {
+  const [folders, setFolders] = useState<{ _id: string; totalItems: number }[]>(
+    []
+  );
+
+  const loadFolders = () =>
+    fetchFolders()
+      .then(setFolders)
+      .catch(console.error);
+
+  useEffect(() => {
+    loadFolders();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
+    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors">
       <Navbar />
-      
-      {/* Your existing content */}
-      <main className="p-6">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-          Welcome to DEZIGN SHARK
-        </h1>
-        <p className="text-gray-700 dark:text-gray-300">
-          Your design content here...
-        </p>
-        
-        {/* Test dark mode with more elements */}
-        <div className="mt-8 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-            Dark Mode Test
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mt-2">
-            This section should change colors when you toggle theme
-          </p>
-        </div>
-      </main>
+      <div className="flex">
+        <Sidebar onShowAll={loadFolders} />
+        <main className="flex-1 p-6 h-[calc(100vh-56px)] overflow-y-auto">
+          {/* header row */}
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Folders
+            </h1>
+            <div className="flex gap-3">
+              <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+                + Create Folder
+              </button>
+              <button className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+                + Add File
+              </button>
+            </div>
+          </div>
+
+          {/* grid */}
+          <FolderGrid folders={folders} />
+        </main>
+      </div>
     </div>
   );
 };
