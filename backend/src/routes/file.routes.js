@@ -10,7 +10,7 @@ const {
   filesByFolder,
 } = require('../controllers/file.controllers');
 
-fileRouter.post('/upload', upload.single('image'), uploadFile); // Changed 'file' to 'image'
+fileRouter.post('/upload', upload.single('file'), uploadFile); // Changed 'file' to 'image'
 fileRouter.get('/folders', getFolders);
 fileRouter.get('/:folder', filesByFolder);
 

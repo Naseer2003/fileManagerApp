@@ -19,6 +19,16 @@ file → type: File
 
 folder → type: Text, e.g., myfolder
 Response:
+{
+"\_id": "...",
+"name": "myimage",
+"url": "https://res.cloudinary.com/your_cloud_name/image/upload/....jpg",
+"folder": "myfolder",
+"size": 12345,
+"type": "jpg",
+"createdAt": "...",
+"\_\_v": 0
+}
 
 GET-http://localhost:5000/api/files/folders
 

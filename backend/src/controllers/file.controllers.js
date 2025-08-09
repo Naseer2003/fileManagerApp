@@ -12,6 +12,7 @@ const uploadFile = async (req, res) => {
 
     const stream = cloudinary.uploader.upload_stream(
       { resource_type: 'auto', folder: req.body.folder || 'default' },
+
       async (error, uploadedFile) => {
         if (error) {
           console.error('Cloudinary upload error:', error);
@@ -26,7 +27,8 @@ const uploadFile = async (req, res) => {
           type: uploadedFile.format,
         });
         await file.save();
-
+        console.log('body', req.body);
+        console.log('file', req.body);
         res.json(file);
       },
     );

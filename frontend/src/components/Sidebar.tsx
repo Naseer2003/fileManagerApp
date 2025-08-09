@@ -1,4 +1,3 @@
-// src/components/Sidebar.tsx
 import React, { useEffect, useState } from "react";
 import { FiLayers, FiFolder } from "react-icons/fi";
 import { fetchFolders } from "../config/api";
@@ -8,15 +7,29 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ onShowAll }) => {
-  const [folders, setFolders] = useState<{ _id: string; totalItems: number }[]>(
-    []
-  );
+  const [folders, setFolders] = useState<{ _id: string; totalItems: number }[]>([]);
+  const [selected, setSelected] = useState<string>("");
 
   useEffect(() => {
     fetchFolders()
       .then(setFolders)
       .catch(console.error);
   }, []);
+
+  const handleClick = (name: string, callback?: () => void) => {
+    setSelected(name);
+    if (callback) callback();
+  };
+
+  const staticButtons = [
+    "All Folders",
+    "Brochures",
+    "Offline Marketing",
+    "Reels",
+    "Static Posts",
+    "LOGO'S",
+    "WEBSITES",
+  ];
 
   return (
     <aside
@@ -28,48 +41,57 @@ const Sidebar: React.FC<SidebarProps> = ({ onShowAll }) => {
         overflow-y-auto transition-colors
       "
     >
-      {/* small header */}
+      {/* Sidebar header */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
           Folders
         </h2>
       </div>
 
-      {/* All Folders button (refreshes grid) */}
-      <div className="p-4">
-        <button
-          onClick={onShowAll}
-          className="
-            flex items-center gap-2 w-full px-3 py-2 rounded-md
-            bg-blue-600 text-white hover:bg-blue-700 transition
-          "
-        >
-          <FiLayers size={18} />
-          All Folders
-        </button>
+      {/* Static buttons */}
+      <div className="p-4 space-y-3">
+        {staticButtons.map((label) => (
+          <button
+            key={label}
+            onClick={() =>
+              handleClick(label, label === "All Folders" ? onShowAll : undefined)
+            }
+            className={`
+              flex items-center gap-2 w-full px-3 py-4 rounded-md transition
+              ${selected === label
+                ? "bg-red-600 text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"}
+            `}
+          >
+            <FiLayers size={18} />
+            {label}
+          </button>
+        ))}
       </div>
 
-      {/* actual folder list */}
-      <nav className="flex-1 px-3 space-y-1">
-        {folders.map(({ _id, totalItems }) => (
-          <a
-            key={_id}
-            href="#"
-            className="
-              flex items-center gap-3 px-3 py-2 rounded-md text-sm
-              text-gray-700 dark:text-gray-200
-              hover:bg-gray-100 dark:hover:bg-gray-700
-              transition-colors
-            "
-          >
-            <FiFolder className="text-blue-500" />
-            <span>{_id}</span>
-            <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
-              {totalItems}
-            </span>
-          </a>
-        ))}
-      </nav>
+      {/* Folder list shown only when 'All Folders' is clicked */}
+      {selected === "All Folders" && (
+        <nav className="flex-1 px-3 space-y-2">
+          {folders.map(({ _id, totalItems }) => (
+            <a
+              key={_id}
+              href="#"
+              className={`
+                flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors
+                ${selected === _id
+                  ? "bg-red-600 text-white"
+                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"}
+              `}
+            >
+              <FiFolder className="text-blue-500" />
+              <span>{_id}</span>
+              <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
+                {totalItems}
+              </span>
+            </a>
+          ))}
+        </nav>
+      )}
     </aside>
   );
 };
