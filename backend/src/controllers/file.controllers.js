@@ -1,7 +1,7 @@
 const multer = require('multer');
 const cloudinary = require('../config/cloudinary'); // already configured
 const FileModel = require('../models/file.model');
-
+const FolderModel = require('../models/folder.model');
 // Multer setup
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -9,10 +9,14 @@ const upload = multer({ storage });
 const uploadFile = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+    if (!req.body.folderId)
+      return res.status(400).json({ error: 'Folder ID is required' });
+
+    const folder = await FolderModel.findById(req.body.folderId);
+    if (!folder) return res.status(404).json({ error: 'Folder not found' });
 
     const stream = cloudinary.uploader.upload_stream(
-      { resource_type: 'auto', folder: req.body.folder || 'default' },
-
+      { resource_type: 'auto', folder: folder.name },
       async (error, uploadedFile) => {
         if (error) {
           console.error('Cloudinary upload error:', error);
@@ -22,13 +26,12 @@ const uploadFile = async (req, res) => {
         const file = new FileModel({
           name: uploadedFile.original_filename,
           url: uploadedFile.secure_url,
-          folder: req.body.folder || 'default',
+          folder: folder._id,
           size: uploadedFile.bytes,
           type: uploadedFile.format,
         });
+
         await file.save();
-        console.log('body', req.body);
-        console.log('file', req.body);
         res.json(file);
       },
     );
@@ -39,10 +42,11 @@ const uploadFile = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
-
 const filesByFolder = async (req, res) => {
   try {
-    const files = await FileModel.find({ folder: req.params.folder });
+    const files = await FileModel.find({
+      folder: req.params.folderId,
+    }).populate('folder');
     res.json(files);
   } catch (err) {
     console.error('Files by folder error:', err);
@@ -50,16 +54,4 @@ const filesByFolder = async (req, res) => {
   }
 };
 
-const getFolders = async (req, res) => {
-  try {
-    const folders = await FileModel.aggregate([
-      { $group: { _id: '$folder', totalItems: { $sum: 1 } } },
-    ]);
-    res.json(folders);
-  } catch (err) {
-    console.error('Get folders error:', err);
-    res.status(500).json({ error: err.message });
-  }
-};
-
-module.exports = { uploadFile, getFolders, filesByFolder, upload };
+module.exports = { uploadFile, filesByFolder, upload };

@@ -6,12 +6,12 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const {
   uploadFile,
-  getFolders,
+
   filesByFolder,
 } = require('../controllers/file.controllers');
 
 fileRouter.post('/upload', upload.single('file'), uploadFile); // Changed 'file' to 'image'
-fileRouter.get('/folders', getFolders);
+
 fileRouter.get('/:folder', filesByFolder);
 
 module.exports = fileRouter;
