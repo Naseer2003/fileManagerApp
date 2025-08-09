@@ -4,11 +4,13 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import FolderGrid from "../components/FolderGrid";
 import { fetchFolders } from "../config/api";
+import { useNavigate } from "react-router-dom";
 
 const HomePage: React.FC = () => {
   const [folders, setFolders] = useState<{ _id: string; totalItems: number }[]>(
     []
   );
+  const navigate = useNavigate();
 
   const loadFolders = () =>
     fetchFolders()
@@ -31,7 +33,7 @@ const HomePage: React.FC = () => {
               Folders
             </h1>
             <div className="flex gap-3">
-              <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+              <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition" onClick={() => navigate('/create')}>
                 + Create Folder
               </button>
               <button className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">

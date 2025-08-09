@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import HomePage from "./pages/HomePage";
 import { ThemeProvider } from "./context/ThemeContext.tsx";
+import CreatePage from "./pages/CreatePage.tsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/" element={<HomePage />} />
+          <Route path="/create" element={<CreatePage />} />
         </Routes>
       </ThemeProvider>
     </>
