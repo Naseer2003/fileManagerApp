@@ -39,7 +39,7 @@ const SignUpPage: React.FC = () => {
 
       localStorage.setItem("token", data.token);
       toast.success("Signup successful!");
-      navigate("/")
+      navigate("/home")
     } catch (err: any) {
       setError(err.response?.data?.message || "Signup failed");
     } finally {
@@ -72,7 +72,7 @@ const SignUpPage: React.FC = () => {
 
          <input
           type="text"
-          placeholder="user"
+          placeholder="example : admin, user"
           value={role}
           onChange={(e) => setRole(e.target.value)}
           className="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"

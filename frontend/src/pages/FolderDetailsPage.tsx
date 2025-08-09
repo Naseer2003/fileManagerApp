@@ -96,7 +96,7 @@ function FolderDetailPage() {
           {uploading ? "Uploading..." : "Upload"}
         </button>
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/home")}
           className="px-5 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg font-medium transition-colors"
         >
           Cancel

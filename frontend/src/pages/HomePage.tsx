@@ -36,9 +36,6 @@ const HomePage: React.FC = () => {
               <button className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition" onClick={() => navigate('/create')}>
                 + Create Folder
               </button>
-              <button className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
-                + Add File
-              </button>
             </div>
           </div>
 

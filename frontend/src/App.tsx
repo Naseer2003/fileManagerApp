@@ -24,10 +24,10 @@ function App() {
 
       <ThemeProvider>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/" element={<HomePage />} />
-          {/* <Route path="/create" element={<CreatePage />} /> */}
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/create" element={<CreatePage />} />
           <Route path="/create/:folderId" element={<CreatePage />} />
         <Route path="/folder/:folderId" element={<FolderDetailPage />} />
         </Routes>

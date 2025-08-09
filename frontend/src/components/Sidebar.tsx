@@ -69,29 +69,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onShowAll }) => {
         ))}
       </div>
 
-      {/* Folder list shown only when 'All Folders' is clicked */}
-      {selected === "All Folders" && (
-        <nav className="flex-1 px-3 space-y-2">
-          {folders.map(({ _id, totalItems }) => (
-            <a
-              key={_id}
-              href="#"
-              className={`
-                flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors
-                ${selected === _id
-                  ? "bg-red-600 text-white"
-                  : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"}
-              `}
-            >
-              <FiFolder className="text-blue-500" />
-              <span>{_id}</span>
-              <span className="ml-auto text-xs text-gray-500 dark:text-gray-400">
-                {totalItems}
-              </span>
-            </a>
-          ))}
-        </nav>
-      )}
+
     </aside>
   );
 };

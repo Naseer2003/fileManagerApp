@@ -37,7 +37,7 @@ const LoginPage: React.FC = () => {
 
       localStorage.setItem("token", data.token);
       toast.success("Login successful!");
-      navigate("/");
+      navigate("/home");
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed");
       toast.error(err.response?.data?.message || "Login failed");
